@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './App.scss'
+
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+
+import AllWeather from './components/AllWeather';
+import Header from './components/Header';
+import WeatherToday from './components/WeatherToday';
+import { fetchWeather } from './redux/slice/weatherSlice';
+
+
 
 function App() {
+
+  const { weather, status } = useSelector(state => state.weather)
+  // const dispatch = useDispatch()
+  // useEffect(() => {
+  //   dispatch(fetchWeather('Lviv'))
+  //   navigator.geolocation.getCurrentPosition(function (position) {
+  //     console.log("Latitude is :", position.coords.latitude);
+  //     console.log("Longitude is :", position.coords.longitude);
+  //   });
+  // }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="day">
+      {status === 'loading' && <>
+        <Header />
+        {/* <WeatherToday /> */}
+        <AllWeather />
+      </>
+      }
     </div>
   );
 }

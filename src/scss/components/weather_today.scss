@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap');
+
+.today {
+    margin-top: 20px;
+    display: flex;
+
+    &__temperature {
+        width: 400px;
+        height: 300px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        border-radius: 30px;
+        padding: 15px;
+
+        .block {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70%;
+            border: 1px solid black;
+
+            img {
+                width: 140px;
+                max-height: 100%;
+            }
+
+            p {
+                font-weight: 500;
+                font-size: 96px;
+            }
+
+            span {
+                font-weight: 400;
+                font-size: 40px;
+            }
+        }
+
+        p {
+            font-weight: 400;
+            color: gray;
+            font-size: 25px;
+        }
+    }
+
+    &__detailed {
+        width: 100%;
+        margin-left: 50px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        div {
+            display: flex;
+            align-items: center;
+            margin: 5px;
+            width: 100%;
+
+
+            .kolo {
+                width: 50px;
+                height: 50px;
+                border-radius: 25px;
+                background-color: aquamarine;
+                position: relative;
+                margin-right: 40px;
+                margin-left: 15px;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+                img {
+                    max-width: 35px;
+                    position: absolute;
+                    margin-left: auto;
+                    margin-right: auto;
+                    left: 0;
+                    position: absolute;
+                    margin-left: auto;
+                    margin-right: auto;
+                    left: 0;
+                    right: 0;
+                    right: 0;
+
+                    text-align: center;
+                }
+            }
+
+            span {
+                width: 10vw;
+            }
+        }
+    }
+}
