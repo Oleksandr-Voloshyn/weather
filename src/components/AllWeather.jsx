@@ -1,66 +1,51 @@
 import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import sun from '../access/sun.png'
+import { setWeatherToday } from '../redux/slice/weatherSlice'
 
 import '../scss/components/all_weather.scss'
-
-const arr = [
-    { "dt": 1661094000, "main": { "temp": 299.98, "feels_like": 300.14, "temp_min": 298.05, "temp_max": 299.98, "pressure": 1008, "sea_level": 1008, "grnd_level": 976, "humidity": 45, "temp_kf": 1.93 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 74 }, "wind": { "speed": 5.17, "deg": 83, "gust": 6.18 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-21 15:00:00" },
-    { "dt": 1661104800, "main": { "temp": 296.44, "feels_like": 296.29, "temp_min": 294.19, "temp_max": 296.44, "pressure": 1009, "sea_level": 1009, "grnd_level": 977, "humidity": 56, "temp_kf": 2.25 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04n" }], "clouds": { "all": 80 }, "wind": { "speed": 3.58, "deg": 59, "gust": 7.24 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-21 18:00:00" },
-    { "dt": 1661115600, "main": { "temp": 293.21, "feels_like": 292.97, "temp_min": 293.21, "temp_max": 293.21, "pressure": 1010, "sea_level": 1010, "grnd_level": 977, "humidity": 65, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04n" }], "clouds": { "all": 83 }, "wind": { "speed": 2.53, "deg": 62, "gust": 5.5 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-21 21:00:00" },
-    { "dt": 1661126400, "main": { "temp": 293.08, "feels_like": 292.83, "temp_min": 293.08, "temp_max": 293.08, "pressure": 1010, "sea_level": 1010, "grnd_level": 977, "humidity": 65, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04n" }], "clouds": { "all": 91 }, "wind": { "speed": 2.45, "deg": 60, "gust": 4.22 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-22 00:00:00" },
-    { "dt": 1661137200, "main": { "temp": 292.67, "feels_like": 292.45, "temp_min": 292.67, "temp_max": 292.67, "pressure": 1010, "sea_level": 1010, "grnd_level": 977, "humidity": 68, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04n" }], "clouds": { "all": 100 }, "wind": { "speed": 2.51, "deg": 66, "gust": 4.73 }, "visibility": 10000, "pop": 0.02, "sys": { "pod": "n" }, "dt_txt": "2022-08-22 03:00:00" },
-    { "dt": 1661148000, "main": { "temp": 294.1, "feels_like": 293.97, "temp_min": 294.1, "temp_max": 294.1, "pressure": 1011, "sea_level": 1011, "grnd_level": 978, "humidity": 66, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04d" }], "clouds": { "all": 100 }, "wind": { "speed": 2.7, "deg": 59, "gust": 4.18 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-22 06:00:00" },
-    { "dt": 1661158800, "main": { "temp": 298.44, "feels_like": 298.38, "temp_min": 298.44, "temp_max": 298.44, "pressure": 1011, "sea_level": 1011, "grnd_level": 979, "humidity": 52, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 84 }, "wind": { "speed": 3.74, "deg": 63, "gust": 4.74 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-22 09:00:00" },
-    { "dt": 1661169600, "main": { "temp": 301.7, "feels_like": 301.48, "temp_min": 301.7, "temp_max": 301.7, "pressure": 1010, "sea_level": 1010, "grnd_level": 978, "humidity": 42, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 62 }, "wind": { "speed": 4.67, "deg": 86, "gust": 4.8 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-22 12:00:00" },
-    { "dt": 1661180400, "main": { "temp": 301.88, "feels_like": 301.66, "temp_min": 301.88, "temp_max": 301.88, "pressure": 1010, "sea_level": 1010, "grnd_level": 978, "humidity": 42, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 65 }, "wind": { "speed": 4.09, "deg": 81, "gust": 4.51 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-22 15:00:00" },
-    { "dt": 1661191200, "main": { "temp": 295.35, "feels_like": 295.43, "temp_min": 295.35, "temp_max": 295.35, "pressure": 1011, "sea_level": 1011, "grnd_level": 978, "humidity": 69, "temp_kf": 0 }, "weather": [{ "id": 500, "main": "Rain", "description": "легкий дощ", "icon": "10n" }], "clouds": { "all": 71 }, "wind": { "speed": 4.16, "deg": 69, "gust": 9.47 }, "visibility": 10000, "pop": 0.24, "rain": { "3h": 0.49 }, "sys": { "pod": "n" }, "dt_txt": "2022-08-22 18:00:00" },
-    { "dt": 1661202000, "main": { "temp": 291.83, "feels_like": 292.03, "temp_min": 291.83, "temp_max": 291.83, "pressure": 1012, "sea_level": 1012, "grnd_level": 979, "humidity": 87, "temp_kf": 0 }, "weather": [{ "id": 500, "main": "Rain", "description": "легкий дощ", "icon": "10n" }], "clouds": { "all": 87 }, "wind": { "speed": 2.6, "deg": 68, "gust": 3.53 }, "visibility": 10000, "pop": 0.77, "rain": { "3h": 1.45 }, "sys": { "pod": "n" }, "dt_txt": "2022-08-22 21:00:00" },
-    { "dt": 1661212800, "main": { "temp": 291.47, "feels_like": 291.6, "temp_min": 291.47, "temp_max": 291.47, "pressure": 1012, "sea_level": 1012, "grnd_level": 979, "humidity": 86, "temp_kf": 0 }, "weather": [{ "id": 500, "main": "Rain", "description": "легкий дощ", "icon": "10n" }], "clouds": { "all": 93 }, "wind": { "speed": 2.6, "deg": 79, "gust": 4.35 }, "visibility": 10000, "pop": 0.71, "rain": { "3h": 0.4 }, "sys": { "pod": "n" }, "dt_txt": "2022-08-23 00:00:00" },
-    { "dt": 1661223600, "main": { "temp": 290.82, "feels_like": 290.89, "temp_min": 290.82, "temp_max": 290.82, "pressure": 1012, "sea_level": 1012, "grnd_level": 979, "humidity": 86, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04n" }], "clouds": { "all": 100 }, "wind": { "speed": 1.45, "deg": 87, "gust": 1.48 }, "visibility": 10000, "pop": 0.04, "sys": { "pod": "n" }, "dt_txt": "2022-08-23 03:00:00" },
-    { "dt": 1661234400, "main": { "temp": 294.18, "feels_like": 294.22, "temp_min": 294.18, "temp_max": 294.18, "pressure": 1013, "sea_level": 1013, "grnd_level": 980, "humidity": 72, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04d" }], "clouds": { "all": 100 }, "wind": { "speed": 2.11, "deg": 92, "gust": 3.53 }, "visibility": 10000, "pop": 0.01, "sys": { "pod": "d" }, "dt_txt": "2022-08-23 06:00:00" },
-    { "dt": 1661245200, "main": { "temp": 300.76, "feels_like": 300.49, "temp_min": 300.76, "temp_max": 300.76, "pressure": 1013, "sea_level": 1013, "grnd_level": 981, "humidity": 40, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04d" }], "clouds": { "all": 85 }, "wind": { "speed": 3.43, "deg": 100, "gust": 4.68 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-23 09:00:00" },
-    { "dt": 1661256000, "main": { "temp": 303.95, "feels_like": 302.86, "temp_min": 303.95, "temp_max": 303.95, "pressure": 1013, "sea_level": 1013, "grnd_level": 981, "humidity": 32, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04d" }], "clouds": { "all": 89 }, "wind": { "speed": 4.06, "deg": 97, "gust": 4.67 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-23 12:00:00" },
-    { "dt": 1661266800, "main": { "temp": 303.58, "feels_like": 302.67, "temp_min": 303.58, "temp_max": 303.58, "pressure": 1012, "sea_level": 1012, "grnd_level": 980, "humidity": 34, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04d" }], "clouds": { "all": 99 }, "wind": { "speed": 4.09, "deg": 93, "gust": 5.53 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-23 15:00:00" },
-    { "dt": 1661277600, "main": { "temp": 297.12, "feels_like": 296.88, "temp_min": 297.12, "temp_max": 297.12, "pressure": 1014, "sea_level": 1014, "grnd_level": 981, "humidity": 50, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04n" }], "clouds": { "all": 89 }, "wind": { "speed": 1.82, "deg": 59, "gust": 1.86 }, "visibility": 10000, "pop": 0.04, "sys": { "pod": "n" }, "dt_txt": "2022-08-23 18:00:00" },
-    { "dt": 1661288400, "main": { "temp": 295.21, "feels_like": 294.93, "temp_min": 295.21, "temp_max": 295.21, "pressure": 1014, "sea_level": 1014, "grnd_level": 981, "humidity": 56, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04n" }], "clouds": { "all": 55 }, "wind": { "speed": 1.82, "deg": 57, "gust": 1.89 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-23 21:00:00" },
-    { "dt": 1661299200, "main": { "temp": 292.31, "feels_like": 291.93, "temp_min": 292.31, "temp_max": 292.31, "pressure": 1015, "sea_level": 1015, "grnd_level": 981, "humidity": 63, "temp_kf": 0 }, "weather": [{ "id": 802, "main": "Clouds", "description": "уривчасті хмари", "icon": "03n" }], "clouds": { "all": 38 }, "wind": { "speed": 0.29, "deg": 91, "gust": 0.83 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-24 00:00:00" },
-    { "dt": 1661310000, "main": { "temp": 291.02, "feels_like": 290.69, "temp_min": 291.02, "temp_max": 291.02, "pressure": 1016, "sea_level": 1016, "grnd_level": 982, "humidity": 70, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 10 }, "wind": { "speed": 1.37, "deg": 221, "gust": 1.52 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-24 03:00:00" },
-    { "dt": 1661320800, "main": { "temp": 295.6, "feels_like": 295.42, "temp_min": 295.6, "temp_max": 295.6, "pressure": 1016, "sea_level": 1016, "grnd_level": 983, "humidity": 58, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01d" }], "clouds": { "all": 7 }, "wind": { "speed": 0.81, "deg": 104, "gust": 1.32 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-24 06:00:00" },
-    { "dt": 1661331600, "main": { "temp": 302.56, "feels_like": 301.65, "temp_min": 302.56, "temp_max": 302.56, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 34, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01d" }], "clouds": { "all": 2 }, "wind": { "speed": 3.17, "deg": 117, "gust": 4.39 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-24 09:00:00" },
-    { "dt": 1661342400, "main": { "temp": 305.59, "feels_like": 304.23, "temp_min": 305.59, "temp_max": 305.59, "pressure": 1016, "sea_level": 1016, "grnd_level": 984, "humidity": 28, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01d" }], "clouds": { "all": 1 }, "wind": { "speed": 4.09, "deg": 112, "gust": 4.54 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-24 12:00:00" },
-    { "dt": 1661353200, "main": { "temp": 305.19, "feels_like": 303.51, "temp_min": 305.19, "temp_max": 305.19, "pressure": 1016, "sea_level": 1016, "grnd_level": 984, "humidity": 25, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01d" }], "clouds": { "all": 0 }, "wind": { "speed": 4.31, "deg": 95, "gust": 5.16 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-24 15:00:00" },
-    { "dt": 1661364000, "main": { "temp": 297.98, "feels_like": 297.46, "temp_min": 297.98, "temp_max": 297.98, "pressure": 1016, "sea_level": 1016, "grnd_level": 984, "humidity": 36, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 0 }, "wind": { "speed": 2.89, "deg": 42, "gust": 3.01 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-24 18:00:00" },
-    { "dt": 1661374800, "main": { "temp": 293.62, "feels_like": 293.08, "temp_min": 293.62, "temp_max": 293.62, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 52, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 2 }, "wind": { "speed": 0.64, "deg": 40, "gust": 1.35 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-24 21:00:00" },
-    { "dt": 1661385600, "main": { "temp": 292.48, "feels_like": 291.62, "temp_min": 292.48, "temp_max": 292.48, "pressure": 1018, "sea_level": 1018, "grnd_level": 984, "humidity": 44, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 4 }, "wind": { "speed": 2.51, "deg": 104, "gust": 2.51 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-25 00:00:00" },
-    { "dt": 1661396400, "main": { "temp": 290.81, "feels_like": 289.88, "temp_min": 290.81, "temp_max": 290.81, "pressure": 1018, "sea_level": 1018, "grnd_level": 984, "humidity": 48, "temp_kf": 0 }, "weather": [{ "id": 801, "main": "Clouds", "description": "кілька хмар", "icon": "02n" }], "clouds": { "all": 18 }, "wind": { "speed": 2.09, "deg": 126, "gust": 2.13 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-25 03:00:00" },
-    { "dt": 1661407200, "main": { "temp": 296.7, "feels_like": 296.05, "temp_min": 296.7, "temp_max": 296.7, "pressure": 1018, "sea_level": 1018, "grnd_level": 985, "humidity": 36, "temp_kf": 0 }, "weather": [{ "id": 802, "main": "Clouds", "description": "уривчасті хмари", "icon": "03d" }], "clouds": { "all": 26 }, "wind": { "speed": 2.5, "deg": 120, "gust": 4.78 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-25 06:00:00" },
-    { "dt": 1661418000, "main": { "temp": 303.61, "feels_like": 301.94, "temp_min": 303.61, "temp_max": 303.61, "pressure": 1018, "sea_level": 1018, "grnd_level": 986, "humidity": 24, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 74 }, "wind": { "speed": 4.02, "deg": 102, "gust": 5.84 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-25 09:00:00" },
-    { "dt": 1661428800, "main": { "temp": 306.15, "feels_like": 303.96, "temp_min": 306.15, "temp_max": 306.15, "pressure": 1017, "sea_level": 1017, "grnd_level": 985, "humidity": 18, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 59 }, "wind": { "speed": 5.05, "deg": 90, "gust": 5.84 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-25 12:00:00" },
-    { "dt": 1661439600, "main": { "temp": 304.94, "feels_like": 302.89, "temp_min": 304.94, "temp_max": 304.94, "pressure": 1016, "sea_level": 1016, "grnd_level": 984, "humidity": 19, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01d" }], "clouds": { "all": 8 }, "wind": { "speed": 5.49, "deg": 76, "gust": 6.21 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-25 15:00:00" },
-    { "dt": 1661450400, "main": { "temp": 296.1, "feels_like": 295.36, "temp_min": 296.1, "temp_max": 296.1, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 35, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 5 }, "wind": { "speed": 3.68, "deg": 57, "gust": 9.41 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-25 18:00:00" },
-    { "dt": 1661461200, "main": { "temp": 293.03, "feels_like": 292.22, "temp_min": 293.03, "temp_max": 293.03, "pressure": 1018, "sea_level": 1018, "grnd_level": 984, "humidity": 44, "temp_kf": 0 }, "weather": [{ "id": 800, "main": "Clear", "description": "чисте небо", "icon": "01n" }], "clouds": { "all": 1 }, "wind": { "speed": 3.04, "deg": 55, "gust": 4.04 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-25 21:00:00" },
-    { "dt": 1661472000, "main": { "temp": 291.79, "feels_like": 290.96, "temp_min": 291.79, "temp_max": 291.79, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 48, "temp_kf": 0 }, "weather": [{ "id": 802, "main": "Clouds", "description": "уривчасті хмари", "icon": "03n" }], "clouds": { "all": 31 }, "wind": { "speed": 2.11, "deg": 69, "gust": 2.25 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-26 00:00:00" },
-    { "dt": 1661482800, "main": { "temp": 291.36, "feels_like": 290.46, "temp_min": 291.36, "temp_max": 291.36, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 47, "temp_kf": 0 }, "weather": [{ "id": 804, "main": "Clouds", "description": "хмарно", "icon": "04n" }], "clouds": { "all": 96 }, "wind": { "speed": 1.6, "deg": 54, "gust": 1.73 }, "visibility": 10000, "pop": 0, "sys": { "pod": "n" }, "dt_txt": "2022-08-26 03:00:00" },
-    { "dt": 1661493600, "main": { "temp": 295.79, "feels_like": 295.15, "temp_min": 295.79, "temp_max": 295.79, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 40, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 79 }, "wind": { "speed": 2.8, "deg": 41, "gust": 4.43 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-26 06:00:00" },
-    { "dt": 1661504400, "main": { "temp": 302.46, "feels_like": 301.17, "temp_min": 302.46, "temp_max": 302.46, "pressure": 1017, "sea_level": 1017, "grnd_level": 984, "humidity": 28, "temp_kf": 0 }, "weather": [{ "id": 802, "main": "Clouds", "description": "уривчасті хмари", "icon": "03d" }], "clouds": { "all": 45 }, "wind": { "speed": 3.54, "deg": 67, "gust": 4.77 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-26 09:00:00" },
-    { "dt": 1661515200, "main": { "temp": 304.63, "feels_like": 302.81, "temp_min": 304.63, "temp_max": 304.63, "pressure": 1016, "sea_level": 1016, "grnd_level": 984, "humidity": 23, "temp_kf": 0 }, "weather": [{ "id": 803, "main": "Clouds", "description": "рвані хмари", "icon": "04d" }], "clouds": { "all": 62 }, "wind": { "speed": 4.42, "deg": 79, "gust": 5.67 }, "visibility": 10000, "pop": 0, "sys": { "pod": "d" }, "dt_txt": "2022-08-26 12:00:00" }
-]
+import ImageWether from '../tert/ImageWether'
 
 
-const Weather = ({ qqq }) => {
-    // arr.map(s => console.log(s.dt_txt === '06:00:00'))
-    // const www = arr.filter(sss => sss.dt_txt.includes('15:00:00'))
-    console.log(qqq)
 
+
+const Weather = ({ weather, index, selectedDay, setSelectedDay }) => {
+
+
+    const { allWeather } = useSelector(state => state.weather)
+    const dispatch = useDispatch();
+
+    let daysWeek = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', "П'ятниця", 'Субота'];
+    let date = weather.dt_txt.slice(0, 10).split('-')
+    if (date[1] < 10) {
+        date[1] = date[1].slice(1)
+    }
+    let arrDay = new Date(date);
+    let day = daysWeek[arrDay.getDay()];
+
+    const selectDay = (day, index) => {
+        setSelectedDay(index)
+        let date = day.dt_txt.slice(0, 10)
+        const selectedWeatherDay = allWeather.list.filter(ww => ww.dt_txt.includes(date))
+        dispatch(setWeatherToday(selectedWeatherDay))
+
+    }
+
+    let daysWeather = allWeather.list.filter(date => date.dt_txt.includes(weather.dt_txt.slice(0, 10)))
+
+    let max = daysWeather.reduce((max, value) => (value.main.temp - 275.3 > max ? Math.floor(value.main.temp - 275.3) : max), 0)
+    let min = daysWeather.reduce((min, value) => (value.main.temp - 275.3 < min ? Math.floor(value.main.temp - 275.3) : min), 100)
+    console.log(weather)
     return (
 
-        <div className='card'>
-            <h5> Сьогодні </h5>
-            <p> 19 серпня</p>
-            <img src={sun} />
-            <p> +18C</p>
-            <p> +15C</p>
-            <p> Сонячно</p>
+        <div className={index === selectedDay ? 'active card' : 'card'} onClick={() => selectDay(weather, index)}>
+            <h5> {day} </h5>
+            <p> {(weather.dt_txt).slice(0, 10)}</p>
+            <ImageWether wea={weather.weather[0].main} />
+            <p> {min}<sup>o</sup>C - {max}<sup>o</sup>C</p>
+            <p> {weather.weather[0].description}</p>
         </div >
     )
 }
@@ -69,11 +54,24 @@ const Weather = ({ qqq }) => {
 
 
 const AllWeather = () => {
-    const www = arr.filter(sss => sss.dt_txt.includes('15:00:00'))
+    const { allWeather } = useSelector(state => state.weather)
+    const [selectedDay, setSelectedDay] = useState('')
+
+    const weatherr = allWeather.list.filter(date => date.dt_txt.includes('15:00:00'))
+
+
+
+
     return (
         <>
             <div className='block_card'>
-                {www.map(qqq => <Weather qqq={qqq} />)}
+                {weatherr.map((weather, index) => <Weather
+                    key={index}
+                    index={index}
+                    weather={weather}
+                    selectedDay={selectedDay}
+                    setSelectedDay={setSelectedDay}
+                />)}
             </div>
         </>
     )

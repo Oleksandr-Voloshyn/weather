@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 
 import '../scss/components/header.scss';
 
-import logo from '../access/logo.png'
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchWeather } from '../redux/slice/weatherSlice';
+import logo from '../access/logo.png';
+import searchImg from '../access/search.png'
+import { useDispatch } from 'react-redux';
+import { fetchAllWeather, fetchWeather } from '../redux/slice/weatherSlice';
 
 const Header = () => {
+
+
     const [search, setSearch] = useState('')
     const dispatch = useDispatch()
-    const { weather } = useSelector(state => state.weather)
 
     const onChangeHandler = (e) => {
         setSearch(e.target.value)
@@ -17,6 +19,7 @@ const Header = () => {
 
     const searchWeather = () => {
         dispatch(fetchWeather(search))
+        dispatch(fetchAllWeather(search))
     }
 
     return (
@@ -26,11 +29,15 @@ const Header = () => {
                 <span> REACT WEATHER</span>
             </div>
             <div className='header__search'>
-                <img src={logo} onClick={() => searchWeather()} />
                 <input type='text'
                     value={search}
                     onChange={onChangeHandler}
                     placeholder="Введіть місто"
+                />
+                <img
+                    src={searchImg}
+                    alt='search'
+                    onClick={searchWeather}
                 />
             </div>
         </div>

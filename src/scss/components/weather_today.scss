@@ -16,7 +16,6 @@
             justify-content: space-between;
             align-items: center;
             height: 70%;
-            border: 1px solid black;
 
             img {
                 width: 140px;
@@ -26,6 +25,7 @@
             p {
                 font-weight: 500;
                 font-size: 96px;
+                color: black;
             }
 
             span {
@@ -41,51 +41,70 @@
         }
     }
 
-    &__detailed {
+    .detailed {
         width: 100%;
         margin-left: 50px;
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         border-radius: 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
 
-        div {
-            display: flex;
-            align-items: center;
-            margin: 5px;
-            width: 100%;
+        &__temperature {
 
+            div {
+                display: flex;
+                align-items: center;
+                float: left;
+                width: 48%;
+                height: 60px;
+                border-bottom: 1px solid gray;
 
-            .kolo {
-                width: 50px;
-                height: 50px;
-                border-radius: 25px;
-                background-color: aquamarine;
-                position: relative;
-                margin-right: 40px;
-                margin-left: 15px;
-                box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+                :nth-child(2) {
+                    width: 35%;
+                }
 
-                img {
-                    max-width: 35px;
-                    position: absolute;
-                    margin-left: auto;
-                    margin-right: auto;
-                    left: 0;
-                    position: absolute;
-                    margin-left: auto;
-                    margin-right: auto;
-                    left: 0;
-                    right: 0;
-                    right: 0;
+                .kolo {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 20px;
+                    position: relative;
+                    margin-right: 10px;
+                    margin-left: 15px;
+                    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 
-                    text-align: center;
+                    img {
+                        max-width: 35px;
+                        margin-left: auto;
+                        margin-right: auto;
+                        left: 0;
+                        position: absolute;
+                        right: 0;
+                    }
                 }
             }
+        }
 
-            span {
-                width: 10vw;
+        .hours {
+            width: 100%;
+            height: 40%;
+            display: flex;
+            padding-top: 30px;
+
+            &__deteils {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-left: 15px;
+                box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+                border-radius: 15px;
+
+                &:nth-last-child(1) {
+                    margin-right: 15px;
+                }
+
+                & img {
+                    width: 56px;
+                }
             }
         }
     }
